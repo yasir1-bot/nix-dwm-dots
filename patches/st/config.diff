@@ -1,0 +1,59 @@
+--- a/config.def.h
++++ b/config.def.h
+@@ -5,8 +5,8 @@
+  *
+  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
+  */
+-static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
+-static int borderpx = 2;
++static char *font = "JetBrainsMono Nerd Font:pixelsize=16:antialias=true:autohint=true";
++static int borderpx = 8;
+ 
+ /*
+  * What program is execed by st depends of these precedence rules:
+@@ -93,35 +93,24 @@
+  */
+ unsigned int tabspaces = 8;
+ 
+-/* Terminal colors (16 first used in escape sequence) */
++/* Terminal colours. The 16 ANSI colours come from pywal via colors.h (theme.nix). */
++#include "colors.h"
+ static const char *colorname[] = {
+ 	/* 8 normal colors */
+-	"black",
+-	"red3",
+-	"green3",
+-	"yellow3",
+-	"blue2",
+-	"magenta3",
+-	"cyan3",
+-	"gray90",
++	WAL_COLOR0, WAL_COLOR1, WAL_COLOR2, WAL_COLOR3,
++	WAL_COLOR4, WAL_COLOR5, WAL_COLOR6, WAL_COLOR7,
+ 
+ 	/* 8 bright colors */
+-	"gray50",
+-	"red",
+-	"green",
+-	"yellow",
+-	"#5c5cff",
+-	"magenta",
+-	"cyan",
+-	"white",
++	WAL_COLOR8, WAL_COLOR9, WAL_COLOR10, WAL_COLOR11,
++	WAL_COLOR12, WAL_COLOR13, WAL_COLOR14, WAL_COLOR15,
+ 
+ 	[255] = 0,
+ 
+ 	/* more colors can be added after 255 to use with DefaultXX */
+-	"#cccccc",
+-	"#555555",
+-	"gray90", /* default foreground colour */
+-	"black", /* default background colour */
++	col_fg,   /* cursor */
++	col_dim,  /* reverse cursor */
++	col_fg,   /* default foreground colour */
++	col_bg,   /* default background colour */
+ };
+ 
+ 
