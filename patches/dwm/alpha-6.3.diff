@@ -128,17 +128,6 @@ index 4cdbcbe..fe3aadd 100644
  	return ret;
  }
  
-@@ -274,9 +278,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
- 	} else {
- 		XSetForeground(drw->dpy, drw->gc, drw->scheme[invert ? ColFg : ColBg].pixel);
- 		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, y, w, h);
--		d = XftDrawCreate(drw->dpy, drw->drawable,
--		                  DefaultVisual(drw->dpy, drw->screen),
--		                  DefaultColormap(drw->dpy, drw->screen));
-+		d = XftDrawCreate(drw->dpy, drw->drawable, drw->visual, drw->cmap);
- 		x += lpad;
- 		w -= lpad;
- 	}
 diff --git a/drw.h b/drw.h
 index 4bcd5ad..a56f523 100644
 --- a/drw.h

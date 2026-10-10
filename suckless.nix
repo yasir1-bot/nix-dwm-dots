@@ -18,6 +18,12 @@
     postPatch = (old.postPatch or "") + ''
       cp ${./suckless/dwm/config.def.h} config.def.h
       cp ${colorsH} colors.h
+
+      # The last drw.c change of the alpha patch (draw text with the 32-bit visual) is done here
+      # instead of in the .diff: dwm 6.6's drw_text() is laid out differently from the 6.3 the
+      # patch was written for, and a diff hunk cannot find it. This substitution ignores layout.
+      sed -z -E 's/XftDrawCreate\(drw->dpy, drw->drawable,[[:space:]]*DefaultVisual\(drw->dpy, drw->screen\),[[:space:]]*DefaultColormap\(drw->dpy, drw->screen\)\)/XftDrawCreate(drw->dpy, drw->drawable, drw->visual, drw->cmap)/' -i drw.c
+      if grep -q DefaultVisual drw.c; then echo "alpha: XftDrawCreate substitution did not match" >&2; exit 1; fi
     '';
   });
 
