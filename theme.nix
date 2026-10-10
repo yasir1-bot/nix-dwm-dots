@@ -18,14 +18,16 @@ let
   #  -n no wallpaper setting   -s/-t don't recolour terminals/ttys   -e don't reload other programs
   #  --contrast keeps every colour readable on the background, whatever the picture looks like
   generated = pkgs.runCommand "pywal-colors.json"
-    { nativeBuildInputs = [ pkgs.pywal16 pkgs.imagemagick ]; }
+    { nativeBuildInputs = [ pkgs.pywal16 pkgs.imagemagick pkgs.jq ]; }
     ''
       export HOME="$TMPDIR"        # wal writes ~/.cache/wal; the sandbox has no real home
       wal -i ${wallpaper} -n -s -t -e -q --backend ${backend} --contrast ${contrast} ${lib.optionalString light "-l"}
-      cp "$HOME/.cache/wal/colors.json" "$out"
+      # wal records the wallpaper's store path in the JSON; Nix refuses to parse JSON that
+      # references store paths, and we do not need that field.
+      jq 'del(.wallpaper)' "$HOME/.cache/wal/colors.json" > "$out"
     '';
 
-  scheme = builtins.fromJSON (builtins.readFile generated);   # reading a build result = "IFD"
+  scheme = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile generated));   # reading a build result = "IFD"
   c = scheme.colors;
 
   # Few named ROLES that every program uses. Remap colours for the whole desktop right here.
